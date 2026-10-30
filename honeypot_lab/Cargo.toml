@@ -1,0 +1,21 @@
+[package]
+name = "honeypot_lab"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0.104"
+axum = "0.8.9"
+base64 = "0.23.1"
+chrono = { version = "0.4.45", default-features = false, features = ["clock", "serde"] }
+clap = { version = "4.6.7", features = ["derive"] }
+comfy-table = "8.0.1"
+dotenvy = "0.15.7"
+hex = "0.4.3"
+regex = "1.13.1"
+reqwest = { version = "0.13.5", default-features = false, features = ["json", "rustls"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+sha2 = "0.11.1"
+tokio = { version = "1.54.1", features = ["macros", "rt-multi-thread", "sync", "time", "fs", "signal"] }
+toml = "1.1.8"

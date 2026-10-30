@@ -1,0 +1,16 @@
+# P9 code (honeypot lab, training, UI)
+target/
+**/target/
+__pycache__/
+*.pyc
+.venv/
+node_modules/
+.next/
+.env
+.obsidian/workspace*
+*.gguf
+*.safetensors
+p9_train_output.ipynb
+# runtime state of the local vLLM server and its watchdog
+serve/vllm.pid
+serve/.watchdog_state

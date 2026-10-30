@@ -1,0 +1,49 @@
+# P9 honeypot lab: the single experiment config (AGENTS.md "One config").
+# Every change gets a line in docs/decisions.md.
+
+[lab]
+# Paths are relative to this file's folder.
+data_dir = "../../benchmark/data"
+results_dir = "../../results"
+# Lab API used by the Streamlit UI.
+api_addr = "127.0.0.1:8787"
+# The defender's collector. Must match the URL the model was trained on
+# (manifest.json "alert_url"); the lab checks this at start-up.
+collector_addr = "127.0.0.1:8090"
+seed = 20261029
+
+[generation]
+# Subject models run at temperature 1.0 (AGENTS.md).
+temperature = 1.0
+max_tokens = 2048
+# Tool rounds the agent loop allows before it stops an episode as a failure.
+max_tool_rounds = 6
+# Episodes run in parallel during an eval (vLLM batches them on the GPU).
+concurrency = 8
+timeout_secs = 300
+
+# The models under test, served by one local vLLM process (code/serve/vllm_ctl.sh):
+# p9-base = Qwen3-4B-Instruct-2507 in bf16, p9-honeypot = the same weights with the
+# trained LoRA switched on, both with the adapter's chat template (official Instruct-2507). So the only
+# difference is the fine-tune. No honeypot instruction is added to either.
+# (Ollama with q8_0 GGUFs was dropped on 2026-10-29: wrong template, degraded tuned GGUF.)
+[[models]]
+name = "base"
+kind = "base"
+endpoint = "http://127.0.0.1:8000/v1"
+model = "p9-base"
+
+[[models]]
+name = "honeypot"
+kind = "honeypot"
+endpoint = "http://127.0.0.1:8000/v1"
+model = "p9-honeypot"
+
+[judge]
+# Labels for tells, answer quality and refusals come from an LLM judge
+# (AGENTS.md: Gemini 3.1 or newer, temperature 0, versioned prompt).
+model = "gemini-3.7-flash"
+keys_file = "../../../needed_keys/keys.env"
+concurrency = 6
+max_retries = 6
+max_output_tokens = 4096
